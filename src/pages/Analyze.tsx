@@ -3,8 +3,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Brain, ChartPie, Image } from "lucide-react";
+import { Brain, ChartPie, Image as ImageIcon } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "@/components/ui/use-toast";
 
@@ -69,34 +68,6 @@ const Analyze = () => {
     setResults(null);
   };
 
-  const sampleScans = [
-    {
-      name: "Normal Brain Scan",
-      description: "Sample of a brain with no signs of Alzheimer's Disease",
-      image: "https://images.unsplash.com/photo-1650704098387-31ee041647d6?auto=format&fit=crop&w=800&q=80"
-    },
-    {
-      name: "Mild Cognitive Impairment",
-      description: "Sample of a brain showing early signs of cognitive decline",
-      image: "https://images.unsplash.com/photo-1626170733247-03810a447680?auto=format&fit=crop&w=800&q=80"
-    },
-    {
-      name: "Alzheimer's Disease Scan",
-      description: "Sample of a brain with significant Alzheimer's pathology",
-      image: "https://images.unsplash.com/photo-1635152137596-42820bb41ddd?auto=format&fit=crop&w=800&q=80"
-    }
-  ];
-
-  const handleSampleSelect = (image: string) => {
-    setImagePreview(image);
-    setSelectedFile(null);
-    setResults(null);
-    toast({
-      title: "Sample image selected",
-      description: "Ready to analyze sample brain scan",
-    });
-  };
-
   return (
     <div className="flex min-h-screen flex-col">
       <Navigation />
@@ -117,214 +88,154 @@ const Analyze = () => {
 
         <section className="py-8">
           <div className="container">
-            <Tabs defaultValue="upload" className="max-w-4xl mx-auto">
-              <TabsList className="grid grid-cols-2 w-[400px] mx-auto">
-                <TabsTrigger value="upload">Upload Scan</TabsTrigger>
-                <TabsTrigger value="samples">Sample Scans</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="upload" className="mt-6">
-                <Card className="medical-card">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Brain className="w-5 h-5 text-alzheimer" />
-                      Brain Scan Analysis
-                    </CardTitle>
-                    <CardDescription>
-                      Upload an MRI or PET scan to analyze for signs of Alzheimer's Disease.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    {!results ? (
-                      <div className="space-y-8">
-                        {imagePreview ? (
-                          <div className="flex flex-col items-center gap-4">
-                            <div className="relative w-full max-w-md mx-auto">
-                              <div className="aspect-square w-full overflow-hidden rounded-lg brain-scan-shadow">
-                                <img 
-                                  src={imagePreview} 
-                                  alt="Brain scan preview" 
-                                  className="h-full w-full object-cover"
-                                />
-                              </div>
-                              <Button 
-                                variant="outline" 
-                                size="sm" 
-                                className="absolute top-2 right-2 bg-white/80 backdrop-blur-sm"
-                                onClick={resetAnalysis}
-                              >
-                                Change
-                              </Button>
-                            </div>
-                            <div className="text-center">
-                              <p className="text-sm text-muted-foreground">
-                                {selectedFile ? `File: ${selectedFile.name}` : 'Sample image selected'}
-                              </p>
-                            </div>
-                            <Button 
-                              onClick={handleAnalyze} 
-                              disabled={isAnalyzing} 
-                              className="bg-alzheimer hover:bg-alzheimer-dark"
-                            >
-                              {isAnalyzing ? (
-                                <>Analyzing Scan...</>
-                              ) : (
-                                <>Analyze Scan</>
-                              )}
-                            </Button>
-                            {isAnalyzing && (
-                              <div className="w-full max-w-md">
-                                <Progress value={50} className="h-2 bg-medical-100" />
-                                <p className="text-xs text-center text-muted-foreground mt-1">
-                                  Processing brain scan through neural network...
-                                </p>
-                              </div>
-                            )}
+            <Card className="medical-card max-w-4xl mx-auto">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Brain className="w-5 h-5 text-alzheimer" />
+                  Brain Scan Analysis
+                </CardTitle>
+                <CardDescription>
+                  Upload an MRI or PET scan to analyze for signs of Alzheimer's Disease.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {!results ? (
+                  <div className="space-y-8">
+                    {imagePreview ? (
+                      <div className="flex flex-col items-center gap-4">
+                        <div className="relative w-full max-w-md mx-auto">
+                          <div className="aspect-square w-full overflow-hidden rounded-lg brain-scan-shadow">
+                            <img 
+                              src={imagePreview} 
+                              alt="Brain scan preview" 
+                              className="h-full w-full object-cover"
+                            />
                           </div>
-                        ) : (
-                          <div className="flex flex-col items-center justify-center border-2 border-dashed border-medical-200 rounded-lg p-12 text-center">
-                            <Image className="w-10 h-10 text-medical-300 mb-4" />
-                            <p className="text-muted-foreground mb-4">Drag and drop your brain scan or click to browse</p>
-                            <label className="cursor-pointer">
-                              <span className="inline-flex items-center justify-center rounded-md bg-alzheimer px-4 py-2 text-sm font-medium text-white hover:bg-alzheimer-dark transition-colors">
-                                Select File
-                              </span>
-                              <input 
-                                type="file" 
-                                className="hidden" 
-                                accept="image/*"
-                                onChange={handleFileChange}
-                              />
-                            </label>
-                            <p className="text-xs text-muted-foreground mt-4">
-                              Supported formats: JPG, PNG, DICOM (uncompressed)
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="absolute top-2 right-2 bg-white/80 backdrop-blur-sm"
+                            onClick={resetAnalysis}
+                          >
+                            Change
+                          </Button>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-sm text-muted-foreground">
+                            {selectedFile ? `File: ${selectedFile.name}` : 'Image selected'}
+                          </p>
+                        </div>
+                        <Button 
+                          onClick={handleAnalyze} 
+                          disabled={isAnalyzing} 
+                          className="bg-alzheimer hover:bg-alzheimer-dark"
+                        >
+                          {isAnalyzing ? (
+                            <>Analyzing Scan...</>
+                          ) : (
+                            <>Analyze Scan</>
+                          )}
+                        </Button>
+                        {isAnalyzing && (
+                          <div className="w-full max-w-md">
+                            <Progress value={50} className="h-2 bg-medical-100" />
+                            <p className="text-xs text-center text-muted-foreground mt-1">
+                              Processing brain scan through neural network...
                             </p>
                           </div>
                         )}
                       </div>
                     ) : (
-                      <div className="space-y-8">
-                        <div className="grid md:grid-cols-2 gap-6">
-                          <div className="order-2 md:order-1">
-                            <div className="space-y-4">
-                              <div>
-                                <h3 className="text-lg font-semibold mb-1">Analysis Results</h3>
-                                <p className="text-sm text-muted-foreground mb-3">
-                                  Prediction: <span className="font-medium text-alzheimer-dark">{results.prediction}</span>
-                                </p>
-                                <div className="space-y-3">
-                                  <div>
-                                    <div className="flex items-center justify-between mb-1">
-                                      <span className="text-sm">Normal</span>
-                                      <span className="text-sm font-medium">{(results.normal * 100).toFixed(1)}%</span>
-                                    </div>
-                                    <Progress value={results.normal * 100} className="h-2 bg-medical-100" />
-                                  </div>
-                                  <div>
-                                    <div className="flex items-center justify-between mb-1">
-                                      <span className="text-sm">Mild Cognitive Impairment</span>
-                                      <span className="text-sm font-medium">{(results.mci * 100).toFixed(1)}%</span>
-                                    </div>
-                                    <Progress value={results.mci * 100} className="h-2 bg-medical-100" />
-                                  </div>
-                                  <div>
-                                    <div className="flex items-center justify-between mb-1">
-                                      <span className="text-sm">Alzheimer's Disease</span>
-                                      <span className="text-sm font-medium">{(results.alzheimers * 100).toFixed(1)}%</span>
-                                    </div>
-                                    <Progress value={results.alzheimers * 100} className="h-2 bg-medical-100" />
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="pt-3 border-t">
-                                <h4 className="text-md font-medium mb-2 flex items-center gap-1">
-                                  <ChartPie className="w-4 h-4" /> Regions of Interest
-                                </h4>
-                                <p className="text-sm text-muted-foreground">
-                                  The model detected significant patterns in the hippocampal region and temporal lobe,
-                                  areas commonly affected in Alzheimer's Disease.
-                                </p>
-                              </div>
-                            </div>
-                            <div className="mt-6">
-                              <Button onClick={resetAnalysis} className="bg-alzheimer hover:bg-alzheimer-dark">
-                                Analyze Another Scan
-                              </Button>
-                            </div>
-                          </div>
-                          <div className="order-1 md:order-2">
-                            <div className="aspect-square w-full overflow-hidden rounded-lg brain-scan-shadow">
-                              <img 
-                                src={imagePreview!} 
-                                alt="Brain scan" 
-                                className="h-full w-full object-cover"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <div>
-                          <p className="text-sm text-muted-foreground rounded-md bg-medical-50 p-4 border border-medical-100">
-                            <strong>Disclaimer:</strong> This analysis is for research and educational purposes only.
-                            The results should not be used for clinical diagnosis. Always consult with a qualified healthcare professional.
-                          </p>
-                        </div>
+                      <div className="flex flex-col items-center justify-center border-2 border-dashed border-medical-200 rounded-lg p-12 text-center">
+                        <ImageIcon className="w-10 h-10 text-medical-300 mb-4" />
+                        <p className="text-muted-foreground mb-4">Drag and drop your brain scan or click to browse</p>
+                        <label className="cursor-pointer">
+                          <span className="inline-flex items-center justify-center rounded-md bg-alzheimer px-4 py-2 text-sm font-medium text-white hover:bg-alzheimer-dark transition-colors">
+                            Select File
+                          </span>
+                          <input 
+                            type="file" 
+                            className="hidden" 
+                            accept="image/*"
+                            onChange={handleFileChange}
+                          />
+                        </label>
+                        <p className="text-xs text-muted-foreground mt-4">
+                          Supported formats: JPG, PNG, DICOM (uncompressed)
+                        </p>
                       </div>
                     )}
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="samples" className="mt-6">
-                <Card className="medical-card">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Image className="w-5 h-5 text-alzheimer" />
-                      Sample Brain Scans
-                    </CardTitle>
-                    <CardDescription>
-                      View and analyze sample brain scans representing different conditions.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {sampleScans.map((scan, index) => (
-                        <div 
-                          key={index} 
-                          className="border rounded-lg overflow-hidden hover:shadow-md transition-all cursor-pointer" 
-                          onClick={() => handleSampleSelect(scan.image)}
-                        >
-                          <div className="aspect-square overflow-hidden">
-                            <img 
-                              src={scan.image} 
-                              alt={scan.name} 
-                              className="h-full w-full object-cover"
-                              onError={(e) => {
-                                console.error(`Failed to load image: ${scan.image}`);
-                                (e.target as HTMLImageElement).src = "https://placehold.co/400x400/gray/white?text=Brain+Scan";
-                              }}
-                            />
+                  </div>
+                ) : (
+                  <div className="space-y-8">
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div className="order-2 md:order-1">
+                        <div className="space-y-4">
+                          <div>
+                            <h3 className="text-lg font-semibold mb-1">Analysis Results</h3>
+                            <p className="text-sm text-muted-foreground mb-3">
+                              Prediction: <span className="font-medium text-alzheimer-dark">{results.prediction}</span>
+                            </p>
+                            <div className="space-y-3">
+                              <div>
+                                <div className="flex items-center justify-between mb-1">
+                                  <span className="text-sm">Normal</span>
+                                  <span className="text-sm font-medium">{(results.normal * 100).toFixed(1)}%</span>
+                                </div>
+                                <Progress value={results.normal * 100} className="h-2 bg-medical-100" />
+                              </div>
+                              <div>
+                                <div className="flex items-center justify-between mb-1">
+                                  <span className="text-sm">Mild Cognitive Impairment</span>
+                                  <span className="text-sm font-medium">{(results.mci * 100).toFixed(1)}%</span>
+                                </div>
+                                <Progress value={results.mci * 100} className="h-2 bg-medical-100" />
+                              </div>
+                              <div>
+                                <div className="flex items-center justify-between mb-1">
+                                  <span className="text-sm">Alzheimer's Disease</span>
+                                  <span className="text-sm font-medium">{(results.alzheimers * 100).toFixed(1)}%</span>
+                                </div>
+                                <Progress value={results.alzheimers * 100} className="h-2 bg-medical-100" />
+                              </div>
+                            </div>
                           </div>
-                          <div className="p-3">
-                            <h4 className="font-medium text-sm">{scan.name}</h4>
-                            <p className="text-xs text-muted-foreground mt-1">
-                              {scan.description}
+                          <div className="pt-3 border-t">
+                            <h4 className="text-md font-medium mb-2 flex items-center gap-1">
+                              <ChartPie className="w-4 h-4" /> Regions of Interest
+                            </h4>
+                            <p className="text-sm text-muted-foreground">
+                              The model detected significant patterns in the hippocampal region and temporal lobe,
+                              areas commonly affected in Alzheimer's Disease.
                             </p>
                           </div>
                         </div>
-                      ))}
+                        <div className="mt-6">
+                          <Button onClick={resetAnalysis} className="bg-alzheimer hover:bg-alzheimer-dark">
+                            Analyze Another Scan
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="order-1 md:order-2">
+                        <div className="aspect-square w-full overflow-hidden rounded-lg brain-scan-shadow">
+                          <img 
+                            src={imagePreview!} 
+                            alt="Brain scan" 
+                            className="h-full w-full object-cover"
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <div className="mt-6 text-center">
-                      <p className="text-sm text-muted-foreground mb-4">
-                        These sample scans are provided for educational purposes to demonstrate how the AI model works.
+                    <div>
+                      <p className="text-sm text-muted-foreground rounded-md bg-medical-50 p-4 border border-medical-100">
+                        <strong>Disclaimer:</strong> This analysis is for research and educational purposes only.
+                        The results should not be used for clinical diagnosis. Always consult with a qualified healthcare professional.
                       </p>
-                      <Button className="bg-alzheimer hover:bg-alzheimer-dark">
-                        Learn More About Brain Imaging
-                      </Button>
                     </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </div>
         </section>
       </main>
