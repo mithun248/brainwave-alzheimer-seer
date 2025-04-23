@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -7,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Brain, ChartPie, Image } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { toast } from "@/components/ui/use-toast";
 
 const Analyze = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -29,6 +29,10 @@ const Analyze = () => {
         setImagePreview(reader.result as string);
       };
       reader.readAsDataURL(file);
+      toast({
+        title: "File selected",
+        description: `${file.name} is ready for analysis`,
+      });
     } else {
       setImagePreview(null);
     }
@@ -51,6 +55,11 @@ const Analyze = () => {
       
       setResults(mockResults);
       setIsAnalyzing(false);
+      
+      toast({
+        title: "Analysis complete",
+        description: `Prediction: ${mockResults.prediction}`,
+      });
     }, 3000);
   };
 
@@ -64,19 +73,29 @@ const Analyze = () => {
     {
       name: "Normal Brain Scan",
       description: "Sample of a brain with no signs of Alzheimer's Disease",
-      image: "https://www.frontiersin.org/files/Articles/896312/fnagi-14-896312-HTML-r1/image_m/fnagi-14-896312-g001.jpg"
+      image: "https://images.unsplash.com/photo-1650704098387-31ee041647d6?auto=format&fit=crop&w=800&q=80"
     },
     {
       name: "Mild Cognitive Impairment",
       description: "Sample of a brain showing early signs of cognitive decline",
-      image: "https://www.frontiersin.org/files/Articles/896312/fnagi-14-896312-HTML-r1/image_m/fnagi-14-896312-g002.jpg"
+      image: "https://images.unsplash.com/photo-1626170733247-03810a447680?auto=format&fit=crop&w=800&q=80"
     },
     {
       name: "Alzheimer's Disease Scan",
       description: "Sample of a brain with significant Alzheimer's pathology",
-      image: "https://www.frontiersin.org/files/Articles/896312/fnagi-14-896312-HTML-r1/image_m/fnagi-14-896312-g003.jpg"
+      image: "https://images.unsplash.com/photo-1635152137596-42820bb41ddd?auto=format&fit=crop&w=800&q=80"
     }
   ];
+
+  const handleSampleSelect = (image: string) => {
+    setImagePreview(image);
+    setSelectedFile(null);
+    setResults(null);
+    toast({
+      title: "Sample image selected",
+      description: "Ready to analyze sample brain scan",
+    });
+  };
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -139,7 +158,7 @@ const Analyze = () => {
                             </div>
                             <div className="text-center">
                               <p className="text-sm text-muted-foreground">
-                                File: {selectedFile?.name}
+                                {selectedFile ? `File: ${selectedFile.name}` : 'Sample image selected'}
                               </p>
                             </div>
                             <Button 
@@ -269,12 +288,20 @@ const Analyze = () => {
                   <CardContent>
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                       {sampleScans.map((scan, index) => (
-                        <div key={index} className="border rounded-lg overflow-hidden hover:shadow-md transition-all">
+                        <div 
+                          key={index} 
+                          className="border rounded-lg overflow-hidden hover:shadow-md transition-all cursor-pointer" 
+                          onClick={() => handleSampleSelect(scan.image)}
+                        >
                           <div className="aspect-square overflow-hidden">
                             <img 
                               src={scan.image} 
                               alt={scan.name} 
                               className="h-full w-full object-cover"
+                              onError={(e) => {
+                                console.error(`Failed to load image: ${scan.image}`);
+                                (e.target as HTMLImageElement).src = "https://placehold.co/400x400/gray/white?text=Brain+Scan";
+                              }}
                             />
                           </div>
                           <div className="p-3">
