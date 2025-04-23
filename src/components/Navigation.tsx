@@ -9,7 +9,7 @@ const Navigation = () => {
       <div className="container flex h-16 items-center">
         <Link to="/" className="flex items-center gap-2 hover:opacity-85">
           <Brain className="h-6 w-6 text-alzheimer animate-pulse-soft" />
-          <span className="text-xl font-semibold">BrainWave</span>
+          <span className="text-xl font-semibold">Alzheimer's Detection</span>
         </Link>
         <nav className="ml-auto flex gap-4 sm:gap-6">
           <Link to="/" className="text-sm font-medium hover:text-alzheimer">
@@ -20,9 +20,6 @@ const Navigation = () => {
           </Link>
           <Link to="/about" className="text-sm font-medium hover:text-alzheimer">
             About
-          </Link>
-          <Link to="/resources" className="text-sm font-medium hover:text-alzheimer">
-            Resources
           </Link>
         </nav>
         <div className="ml-4">

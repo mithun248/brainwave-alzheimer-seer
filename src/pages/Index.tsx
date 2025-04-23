@@ -145,7 +145,7 @@ const Index = () => {
           <div className="container">
             <div className="flex flex-col items-center justify-center text-center space-y-4">
               <h2 className="font-bold text-3xl leading-[1.1] sm:text-3xl md:text-4xl">
-                Ready to Try BrainWave?
+                Ready to Try Alzheimer's Detection?
               </h2>
               <p className="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
                 Start analyzing brain scans with our advanced AI model to assist in early detection of Alzheimer's Disease.
@@ -154,8 +154,8 @@ const Index = () => {
                 <Link to="/analyze">
                   <Button className="bg-alzheimer hover:bg-alzheimer-dark">Start Analysis</Button>
                 </Link>
-                <Link to="/resources">
-                  <Button variant="outline">Explore Resources</Button>
+                <Link to="/about">
+                  <Button variant="outline">Learn More</Button>
                 </Link>
               </div>
             </div>
